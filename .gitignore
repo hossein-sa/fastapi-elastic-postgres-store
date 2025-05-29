@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/ # Your virtual environment directory
+venv/ # Common virtual environment directory name
+
+# Environment variables
+.env # Your environment variables file
+.env.*
+!.env.example # Keep example environment files
+
+# IDEs (VSCode/Cursor)
+.vscode/ # VSCode/Cursor settings (user-specific)
+.cursor/ # Cursor-specific settings
+
+# Operating System files
+.DS_Store
+.Trash/
+Thumbs.db
+
+# Database files (if any local development databases are created, though you use PostgreSQL)
+# For example, if you ever used SQLite for local testing:
+*.sqlite3
+*.db
+
+# Docker
+# Docker generates some files that should typically be ignored
+# if you're not committing your Docker build context.
+# However, if you are using Docker Desktop, the data for ES/PG
+# is usually in Docker volumes, not in your project folder.
+# If you have any local Docker-related build artifacts:
+*.dockerignore
+*.tar.gz
+*.zip
+
+# Logs
+*.log
+logs/
+tmp/
+
+# Testing
+.coverage
+.coverage.*
+htmlcov/
+
+# Miscellaneous
+*.bak
+*.swp
+*~
+.idea/ # PyCharm or other JetBrains IDEs
