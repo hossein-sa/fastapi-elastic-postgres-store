@@ -12,6 +12,7 @@ A modern backend for an online product store built with **FastAPI**, **PostgreSQ
 - 🔎 Fuzzy search support
 - 🧠 Completion & term suggesters
 - 🧪 Test suite with `pytest`, `pytest-asyncio`, and Elasticsearch integration
+- 🐳 Fully dockerized environment
 
 ---
 
@@ -20,22 +21,40 @@ A modern backend for an online product store built with **FastAPI**, **PostgreSQ
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/fastapi-elastic-postgres-store.git
+git clone https://github.com/hossein-sa/fastapi-elastic-postgres-store.git
 cd fastapi-elastic-postgres-store
 ```
 
-### 2. Create a Virtual Environment
+### 2. Run with Docker Compose
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+docker-compose up --build
 ```
 
-### 3. Install Dependencies
+- FastAPI will be available at: `http://localhost:8000`
+- Swagger UI: `http://localhost:8000/docs`
+
+To stop:
 
 ```bash
-pip install -r requirements.txt
+docker-compose down
 ```
+
+---
+
+## 🧪 Run Tests
+
+Make sure PostgreSQL and Elasticsearch containers are running:
+
+```bash
+pytest
+```
+
+Test coverage includes:
+
+- API endpoints
+- Elasticsearch search & suggest features
+- CRUD operations
 
 ---
 
@@ -56,69 +75,33 @@ pip install -r requirements.txt
 │   └── test_products.py  # All API and search tests
 ├── conftest.py           # Pytest fixtures
 ├── pytest.ini            # Pytest config
+├── Dockerfile            # API Dockerfile
+├── docker-compose.yml    # Compose file for API + PostgreSQL + Elasticsearch
 └── requirements.txt
 ```
 
 ---
 
-## 🗃️ PostgreSQL Setup
-
-Make sure you have a PostgreSQL instance running. Create a database called `store`:
-
-```sql
-CREATE DATABASE store;
-```
-
-Update your `DATABASE_URL` in `app/db.py` accordingly.
-
----
-
-## 🔎 Elasticsearch Setup
-
-Start an Elasticsearch container (if needed):
-
-```bash
-docker run -d -p 9200:9200 -e "discovery.type=single-node" elasticsearch:8.12.0
-```
-
-Or connect to your existing ES instance.
-
----
-
-## 🧪 Running Tests
-
-We use `pytest` with `TestClient` and real integration with Elasticsearch:
-
-```bash
-pytest
-```
-
-Ensure that:
-- PostgreSQL and Elasticsearch are running.
-- `.env` or settings are properly configured.
-
----
-
 ## 🌐 API Endpoints
 
-| Method | Endpoint             | Description                     |
-|--------|----------------------|---------------------------------|
-| GET    | `/products/`         | List all products               |
-| POST   | `/products/`         | Create new product              |
-| GET    | `/products/{id}`     | Retrieve product by ID          |
-| PUT    | `/products/{id}`     | Update product by ID            |
-| DELETE | `/products/{id}`     | Delete product by ID            |
-| GET    | `/search`            | Filter search (brand, price...) |
-| GET    | `/autocomplete`      | Autocomplete by product name    |
-| GET    | `/fuzzy-search`      | Fuzzy match on product name     |
-| GET    | `/suggest`           | Term suggestions                |
+| Method | Endpoint             | Description                      |
+|--------|----------------------|----------------------------------|
+| GET    | `/products/`         | List all products                |
+| POST   | `/products/`         | Create new product               |
+| GET    | `/products/{id}`     | Retrieve product by ID           |
+| PUT    | `/products/{id}`     | Update product by ID             |
+| DELETE | `/products/{id}`     | Delete product by ID             |
+| GET    | `/search`            | Filter search (brand, price...)  |
+| GET    | `/autocomplete`      | Autocomplete by product name     |
+| GET    | `/fuzzy-search`      | Fuzzy match on product name      |
+| GET    | `/suggest`           | Term suggestions                 |
 | GET    | `/suggest-complete`  | Completion suggester (with fuzzy)|
 
 ---
 
-## 🔄 Manual Elasticsearch Sync
+## 🔄 Sync Database with Elasticsearch
 
-Run this script to sync all products from DB to Elasticsearch:
+Use this script to manually sync all DB products to Elasticsearch:
 
 ```bash
 python sync_to_elastic.py
@@ -126,28 +109,33 @@ python sync_to_elastic.py
 
 ---
 
-## 📌 Notes
+## 🧠 Tech Notes
 
-- **Pydantic v2** is used — keep in mind `ConfigDict` replaces old `Config` style.
-- Elasticsearch mappings and suggesters are managed manually in `manage_index.py`.
+- Using **Pydantic v2** — `ConfigDict` replaces the old `Config` style
+- `model_dump()` replaces `dict()` for model export
+- Elasticsearch suggesters and mappings are defined in `manage_index.py`
 
 ---
 
-## 🧠 TODO
+## ✅ TODOs
 
-- [ ] Add CI pipeline with GitHub Actions
-- [ ] Dockerize the whole stack (Postgres + FastAPI + ES)
-- [ ] Add more advanced analyzers to ES
-- [ ] Extend unit tests to include edge cases
+- [x] Basic CRUD APIs
+- [x] Elasticsearch integration
+- [x] Pytest coverage for API & ES
+- [x] Docker Compose support
+- [ ] Add CI/CD with GitHub Actions
+- [ ] Add token-based authentication
+- [ ] Add user/product relationships
 
 ---
 
 ## 🧑‍💻 Author
 
-**Hossein Sa** — [GitHub Profile](https://github.com/hossein-sa)
+**Hossein Sa**  
+[GitHub](https://github.com/hossein-sa)
 
 ---
 
 ## 📝 License
 
-This project is open source under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
