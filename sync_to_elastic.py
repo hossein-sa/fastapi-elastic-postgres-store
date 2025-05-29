@@ -11,11 +11,17 @@ def sync_all_products():
         products = db.query(Product).all()
         for p in products:
             es.index(index=index_name, id=p.id, document={
-                "name": p.name,
+                "name": p.name,  # 👈 name فقط string باشه
                 "brand": p.brand,
                 "price": p.price,
-                "in_stock": p.in_stock
+                "in_stock": p.in_stock,
+                "name_suggest": {
+                    "input": [p.name],
+                    "weight": 10  # اختیاری: برای اولویت
+                }
             })
+
+
 
             print(f"Synced product ID {p.id}")
     finally:

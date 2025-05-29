@@ -15,25 +15,25 @@ index_body = {
         }
     },
     "mappings": {
-        "properties": {
-            "name": {
-                "type": "text",
-                "fields": {
-                    "raw": {
-                        "type": "keyword"
-                    },
-                    "lower": {
-                        "type": "keyword",
-                        "normalizer": "lowercase_normalizer"
-                    }
-                }
-            },
-            "brand": {"type": "keyword"},
-            "price": {"type": "float"},
-            "in_stock": {"type": "boolean"}
-        }
+    "properties": {
+        "name": {
+            "type": "text",
+            "fields": {
+                "raw": { "type": "keyword" },
+                "lower": { "type": "keyword", "normalizer": "lowercase_normalizer" }
+            }
+        },
+        "name_suggest": {   # ✅ الان فیلد مستقل شد
+            "type": "completion"
+        },
+        "brand": { "type": "keyword" },
+        "price": { "type": "float" },
+        "in_stock": { "type": "boolean" }
     }
 }
+
+}
+
 
 def recreate_index():
     if es.indices.exists(index=index_name):
