@@ -86,3 +86,34 @@ def delete(product_id: int, db: Session = Depends(get_db)):
     if not deleted:
         raise HTTPException(status_code=404, detail="Product not found")
     return deleted
+
+
+@app.get("/autocomplete")
+def autocomplete(q: str = Query(...)):
+    query = {
+        "query": {
+            "prefix": {
+                "name.lower": q.lower()
+            }
+        }
+    }
+
+    results = es.search(index=index_name, body=query)
+    return {"results": [hit["_source"] for hit in results["hits"]["hits"]]}
+
+
+@app.get("/fuzzy-search")
+def fuzzy_search(q: str = Query(..., min_length=1)):
+    query = {
+        "query": {
+            "match": {
+                "name": {
+                    "query": q,
+                    "fuzziness": "AUTO"
+                }
+            }
+        }
+    }
+
+    results = es.search(index=index_name, body=query)
+    return {"results": [hit["_source"] for hit in results["hits"]["hits"]]}
