@@ -21,6 +21,9 @@ venv/ # Common virtual environment directory name
 # IDEs (VSCode/Cursor)
 .vscode/ # VSCode/Cursor settings (user-specific)
 .cursor/ # Cursor-specific settings
+.venv/
+
+.venv
 
 # Operating System files
 .DS_Store
