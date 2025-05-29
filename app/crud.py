@@ -6,7 +6,7 @@ es = get_elastic_client()
 index_name = "products"
 
 def create_product(db: Session, product: schemas.ProductCreate):
-    db_product = models.Product(**product.dict())
+    db_product = models.Product(**product.model_dump(exclude_unset=True))
     db.add(db_product)
     db.commit()
     db.refresh(db_product)

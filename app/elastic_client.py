@@ -3,11 +3,10 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-ELASTICSEARCH_URL = os.getenv("ELASTICSEARCH_URL")
+ELASTICSEARCH_HOST = os.getenv("ELASTICSEARCH_HOST", "http://localhost:9200")
 
-es = Elasticsearch(ELASTICSEARCH_URL, verify_certs=False)
+es = Elasticsearch(ELASTICSEARCH_HOST, verify_certs=False)
+
 
 def get_elastic_client():
-    if not es.ping():
-        raise ConnectionError("Elasticsearch not available")
-    return es
+    return Elasticsearch(hosts=[ELASTICSEARCH_HOST])
