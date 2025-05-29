@@ -70,3 +70,19 @@ def search_products(
     hits = [hit["_source"] for hit in result["hits"]["hits"]]
 
     return {"results": hits}
+
+
+@app.put("/products/{product_id}", response_model=schemas.ProductOut)
+def update(product_id: int, product: schemas.ProductCreate, db: Session = Depends(get_db)):
+    updated = crud.update_product(db, product_id, product)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return updated
+
+
+@app.delete("/products/{product_id}", response_model=schemas.ProductOut)
+def delete(product_id: int, db: Session = Depends(get_db)):
+    deleted = crud.delete_product(db, product_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return deleted
